@@ -1,0 +1,23 @@
+# 키·네트워크 없이 전체 테스트와 시작 명령을 돌린다.
+name: ci
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "17 3 * * 1"   # 매주 월요일 — 런타임이 바뀌어 깨지지 않았는지 정기 확인
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v10.3.3
+      - run: uv python install ${{ matrix.python }}
+      - run: uv sync --locked --python ${{ matrix.python }}
+      - run: uv run pytest -q
+      - run: uv run hwpx-doctor check examples --exit-zero

@@ -1,0 +1,6 @@
+- id: hwpx-doctor
+  name: hwpx-doctor
+  description: Check HWPX (OWPML) files for container, manifest and ID-reference defects.
+  entry: hwpx-doctor check
+  language: python
+  files: \.hwpx$
